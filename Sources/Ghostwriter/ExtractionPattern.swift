@@ -7,49 +7,14 @@
 
 import Foundation
 
-public class ExtractionPattern
+public class ExtractionPattern: Codable
 {
-    let extractor: (String) -> String?
+    let expression: String
     let type: Types
-
-    public init(_ extractor: @escaping (String) -> String?, type: Types)
-    {
-        self.extractor = extractor
-        self.type = type
-    }
 
     public init(_ expression: String, _ type: Types)
     {
-        self.extractor =
-        {
-            (x: String) -> String? in
-
-            guard let regex = try? NSRegularExpression(pattern: expression, options: []) else
-            {
-                return nil
-            }
-
-            let range = NSRange(x.startIndex..<x.endIndex, in: x)
-
-            let matches = regex.matches(in: x, options: [], range: range)
-
-            guard let match = matches.first else
-            {
-                return nil
-            }
-
-            let matchRange = match.range(at: 0)
-
-            // Extract the substring matching the capture group
-            if let substringRange = Range(matchRange, in: x)
-            {
-                let capture = String(x[substringRange])
-                return capture
-            }
-
-            return nil
-        }
-
+        self.expression = expression
         self.type = type
     }
 
@@ -85,6 +50,34 @@ public class ExtractionPattern
                 let value = UInt(string: string)
                 return .uint(value)
         }
+    }
+
+    func extractor(_ x: String) -> String?
+    {
+        guard let regex = try? NSRegularExpression(pattern: expression, options: []) else
+        {
+            return nil
+        }
+
+        let range = NSRange(x.startIndex..<x.endIndex, in: x)
+
+        let matches = regex.matches(in: x, options: [], range: range)
+
+        guard let match = matches.first else
+        {
+            return nil
+        }
+
+        let matchRange = match.range(at: 0)
+
+        // Extract the substring matching the capture group
+        if let substringRange = Range(matchRange, in: x)
+        {
+            let capture = String(x[substringRange])
+            return capture
+        }
+
+        return nil
     }
 }
 

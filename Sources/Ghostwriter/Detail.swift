@@ -9,7 +9,7 @@ import Foundation
 
 import Datable
 
-public enum Types
+public enum Types: Codable
 {
     case string
     case int
@@ -18,7 +18,7 @@ public enum Types
     case data
 }
 
-public enum Detail: Equatable
+public enum Detail: Equatable, Codable
 {
     case string(String)
     case int(Int)

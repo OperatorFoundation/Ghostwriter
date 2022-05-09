@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Template
+public struct Template: Codable
 {
     let string: String
 
