@@ -71,7 +71,7 @@ public class ExtractionPattern: Codable
         let matchRange = match.range(at: 0)
 
         // Extract the substring matching the capture group
-        print(x.count)
+        print("data count: \(x.data.count), string count: \(x.count)")
         if let substringRange = Range(matchRange, in: x)
         {
             let capture = String(x[substringRange])
