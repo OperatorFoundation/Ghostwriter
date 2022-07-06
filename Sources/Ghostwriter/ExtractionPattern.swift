@@ -69,7 +69,7 @@ public class ExtractionPattern: Codable
         }
         
         print(match.numberOfRanges)
-        let matchRange = match.range(at: 0)
+        let matchRange = match.range(at: 1)
 
         // Extract the substring matching the capture group
         print("data count: \(x.data.count), string count: \(x.count)")
