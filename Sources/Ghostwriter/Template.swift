@@ -34,25 +34,35 @@ public struct Template: Codable
     public func extract(_ index: Int, _ pattern: ExtractionPattern, _ source: String) throws -> (Template, String, Detail)
     {
         let oldText = "$\(index)"
+        
+        guard !source.isEmpty else
+        {
+            throw TemplateError.sourceIsEmpty
+        }
 
         // Find the substitution in the template
-        guard let index = self.string.index(of: oldText) else
+        guard let oldTextStringIndex = self.string.index(of: oldText) else
         {
             throw TemplateError.noSubstitution(oldText)
         }
-
-        let templatePreludeIndex = self.string.index(index, offsetBy: oldText.count)
-        let sourcePreludeIndex = source.index(index, offsetBy: 0)
-
-        let prelude = String(self.string[..<index])
-
+        
+        // All of the text that precedes the variable we are looking for
+        let prelude = String(self.string[..<oldTextStringIndex])
+        
+        guard source.count >= prelude.count else
+        {
+            throw TemplateError.sourceTooSmall(source)
+        }
+        
+        // Make sure that the text we got matches the beginning of our template
         guard source.starts(with: prelude) else
         {
             throw TemplateError.sourceDoesNotMatchTemplate
         }
-
-        let templateRest = String(self.string[templatePreludeIndex...])
-        let sourceRest = String(source[sourcePreludeIndex...])
+        
+        // Extract the variable we are looking for
+        let sourceAfterwordStringIndex = source.index(oldTextStringIndex, offsetBy: 0)
+        let sourceRest = String(source[sourceAfterwordStringIndex...])
 
         let result = try pattern.extract(sourceRest)
         let detail = try pattern.convert(result)
@@ -61,10 +71,16 @@ public struct Template: Codable
         {
             throw TemplateError.sourceDoesNotMatchTemplate
         }
+        
         matchIndex = sourceRest.index(matchIndex, offsetBy: result.count)
 
+        // The variable we are looking for
         let sourceFinal = String(sourceRest[matchIndex...])
-
+        
+        // Return the part of the template which comes after the variable we extracted
+        let templateAfterwordStringIndex = self.string.index(oldTextStringIndex, offsetBy: oldText.count)
+        let templateRest = String(self.string[templateAfterwordStringIndex...])
+        
         return (Template(templateRest), sourceFinal, detail)
     }
 }
@@ -73,6 +89,8 @@ public enum TemplateError: Error
 {
     case sourceDoesNotMatchTemplate
     case noSubstitution(String)
+    case sourceTooSmall(String)
+    case sourceIsEmpty
 }
 
 extension StringProtocol {

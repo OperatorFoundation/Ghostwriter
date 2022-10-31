@@ -34,7 +34,7 @@ final class GhostwriterTests: XCTestCase {
         let template = Template("a$1z")
         let patterns: [ExtractionPattern] =
         [
-            ExtractionPattern(#"[0-9]+"#, .int)
+            ExtractionPattern(#"([0-9]+)"#, .int)
         ]
         let input = "a1z"
 
@@ -48,7 +48,7 @@ final class GhostwriterTests: XCTestCase {
         let template = Template("a$1z")
         let patterns: [ExtractionPattern] =
         [
-            ExtractionPattern(#"[A-Za-z0-9]"#, .string)
+            ExtractionPattern(#"([A-Za-z0-9])"#, .string)
         ]
         let input = "abz"
 
@@ -62,7 +62,7 @@ final class GhostwriterTests: XCTestCase {
         let template = Template("a$1z")
         let patterns: [ExtractionPattern] =
         [
-            ExtractionPattern(#"[0-9]+.[0-9]+"#, .float)
+            ExtractionPattern(#"([0-9]+.[0-9]+)"#, .float)
         ]
         let input = "a2.0z"
 

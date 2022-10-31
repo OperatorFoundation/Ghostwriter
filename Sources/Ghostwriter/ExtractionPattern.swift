@@ -68,7 +68,12 @@ public class ExtractionPattern: Codable
             return nil
         }
         
-        print(match.numberOfRanges)
+        print("match.numberOfRanges - \(match.numberOfRanges)")
+        guard match.numberOfRanges > 1 else
+        {
+            return nil
+        }
+        
         let matchRange = match.range(at: 1)
 
         // Extract the substring matching the capture group
