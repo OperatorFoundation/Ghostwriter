@@ -31,3 +31,11 @@ extension StructuredText
         return self.texts.map { $0.string }.joined()
     }
 }
+
+extension StructuredText
+{
+    public var data: Data
+    {
+        return self.string.data
+    }
+}
