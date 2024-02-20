@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "Ghostwriter",
     platforms: [
-        .macOS(.v14),
+        .macOS(.v13),
         .iOS(.v15)
     ],
     products: [

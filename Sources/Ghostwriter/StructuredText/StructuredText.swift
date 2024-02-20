@@ -39,3 +39,11 @@ extension StructuredText
         return self.string.data
     }
 }
+
+extension StructuredText
+{
+    public func match(string: String)
+    {
+        
+    }
+}
