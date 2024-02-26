@@ -16,6 +16,7 @@ public enum TypedText
     case special(SpecialCharacter)
     case string(String)
     case text(Text)
+    case newline(Newline)
 }
 
 extension TypedText
@@ -38,6 +39,9 @@ extension TypedText
 
             case .text(let text):
                 return text.string
+
+            case .newline(let newline):
+                return newline.string
         }
     }
 }
