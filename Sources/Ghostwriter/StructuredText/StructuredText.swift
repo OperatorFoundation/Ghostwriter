@@ -42,8 +42,8 @@ extension StructuredText
 
 extension StructuredText
 {
-    public func match(string: String)
+    public func match(string: String) throws -> Bool
     {
-        
+        return false
     }
 }
