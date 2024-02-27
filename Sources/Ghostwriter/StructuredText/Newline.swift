@@ -9,6 +9,7 @@ import Foundation
 
 public enum Newline
 {
+    case crlf
     case posix
     case qnx
     case risc
@@ -22,6 +23,9 @@ extension Newline: CustomStringConvertible
     {
         switch self
         {
+            case .crlf:
+                return SpecialCharacter.CR.description + SpecialCharacter.LF.description
+
             case .posix:
                 return SpecialCharacter.LF.description
 
@@ -46,6 +50,9 @@ extension Newline
     {
         switch self
         {
+            case .crlf:
+                return SpecialCharacter.CR.string + SpecialCharacter.LF.string
+
             case .posix:
                 return SpecialCharacter.LF.string
 
