@@ -47,3 +47,11 @@ extension StructuredText
         return false
     }
 }
+
+extension StructuredText: CustomStringConvertible
+{
+    public var description: String
+    {
+        return self.string
+    }
+}
