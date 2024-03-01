@@ -46,6 +46,33 @@ extension TypedText
     }
 }
 
+extension TypedText: CustomStringConvertible
+{
+    public var description: String
+    {
+        switch self
+        {
+            case .generator(let generator):
+                return "() -> \(generator().string)"
+
+            case .regexp(let string):
+                return "/\(string)/"
+
+            case .special(let special):
+                return "[\(special.string)]"
+
+            case .string(let string):
+                return "\"\(string)\""
+
+            case .text(let text):
+                return "'\(text.string)'"
+
+            case .newline(let newline):
+                return newline.description
+        }
+    }
+}
+
 //extension TypedText
 //{
 //    public func match(string x: String) -> Bool

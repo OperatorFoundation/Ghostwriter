@@ -52,6 +52,6 @@ extension StructuredText: CustomStringConvertible
 {
     public var description: String
     {
-        return self.string
+        self.texts.map { $0.description }.joined(separator: " ")
     }
 }
