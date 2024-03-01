@@ -24,22 +24,22 @@ extension Newline: CustomStringConvertible
         switch self
         {
             case .crlf:
-                return SpecialCharacter.CR.description + SpecialCharacter.LF.description
+                return "<CR><LF>"
 
             case .posix:
-                return SpecialCharacter.LF.description
+                return "<LF>"
 
             case .qnx:
-                return SpecialCharacter.RS.description
+                return "<RS>"
 
             case .risc:
-                return SpecialCharacter.LF.description + SpecialCharacter.CR.description
+                return "<LF><CR>"
 
             case .windows:
-                return SpecialCharacter.CR.description + SpecialCharacter.LF.description
+                return "<CR><LF>"
 
             case .zx:
-                return SpecialCharacter.LF.description
+                return "<LF>"
         }
     }
 }
