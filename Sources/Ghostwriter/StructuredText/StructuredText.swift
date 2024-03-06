@@ -11,7 +11,7 @@ import Text
 
 public struct StructuredText
 {
-    let texts: [TypedText]
+    public let texts: [TypedText]
 
     public init(texts: [TypedText])
     {
