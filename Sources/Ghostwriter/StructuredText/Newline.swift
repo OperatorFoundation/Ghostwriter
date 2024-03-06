@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum Newline
+public enum Newline: String
 {
     case crlf
     case posix
