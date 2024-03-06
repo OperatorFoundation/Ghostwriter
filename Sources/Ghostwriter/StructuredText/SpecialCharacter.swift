@@ -11,42 +11,263 @@ import Datable
 import SwiftHexTools
 import Text
 
-public enum SpecialCharacter: UInt8
+public enum SpecialCharacter: String
 {
-    case NUL = 0
-    case SOH = 1
-    case STX = 2
-    case ETX = 3
-    case EOT = 4
-    case ENQ = 5
-    case ACK = 6
-    case BEL = 7
-    case BS = 8
-    case TAB = 9
-    case LF = 10
-    case VT = 11
-    case FF = 12
-    case CR = 13
-    case SO = 14
-    case SI = 15
-    case DLE = 16
-    case DC1 = 17
-    case DC2 = 18
-    case DC3 = 19
-    case DC4 = 20
-    case NAK = 21
-    case SYN = 22
-    case ETB = 23
-    case CAN = 24
-    case EM = 25
-    case SUB = 26
-    case ESC = 27
-    case FS = 28
-    case GS = 29
-    case RS = 30
-    case US = 31
-    case Space = 32
-    case DEL = 127
+    case NUL
+    case SOH
+    case STX
+    case ETX
+    case EOT
+    case ENQ
+    case ACK
+    case BEL
+    case BS
+    case TAB
+    case LF
+    case VT
+    case FF
+    case CR
+    case SO
+    case SI
+    case DLE
+    case DC1
+    case DC2
+    case DC3
+    case DC4
+    case NAK
+    case SYN
+    case ETB
+    case CAN
+    case EM
+    case SUB
+    case ESC
+    case FS
+    case GS
+    case RS
+    case US
+    case Space
+    case DEL
+}
+
+extension SpecialCharacter
+{
+    public var uint8: UInt8
+    {
+        switch self
+        {
+            case .NUL:
+                return 0
+            case .SOH:
+                return 1
+
+            case .STX:
+                return 2
+
+            case .ETX:
+                return 3
+
+            case .EOT:
+                return 4
+
+            case .ENQ:
+                return 5
+
+            case .ACK:
+                return 6
+
+            case .BEL:
+                return 7
+
+            case .BS:
+                return 8
+
+            case .TAB:
+                return 9
+
+            case .LF:
+                return 10
+
+            case .VT:
+                return 11
+
+            case .FF:
+                return 12
+
+            case .CR:
+                return 13
+
+            case .SO:
+                return 14
+
+            case .SI:
+                return 15
+
+            case .DLE:
+                return 16
+
+            case .DC1:
+                return 17
+
+            case .DC2:
+                return 18
+
+            case .DC3:
+                return 19
+
+            case .DC4:
+                return 20
+
+            case .NAK:
+                return 21
+
+            case .SYN:
+                return 22
+
+            case .ETB:
+                return 23
+
+            case .CAN:
+                return 24
+
+            case .EM:
+                return 25
+
+            case .SUB:
+                return 26
+
+            case .ESC:
+                return 27
+
+            case .FS:
+                return 28
+
+            case .GS:
+                return 29
+
+            case .RS:
+                return 30
+
+            case .US:
+                return 31
+
+            case .Space:
+                return 32
+
+            case .DEL:
+                return 127
+        }
+    }
+
+    public init?(uint8: UInt8)
+    {
+        switch uint8
+        {
+            case 0:
+                self = .NUL
+
+            case 1:
+                self = .SOH
+
+            case 2:
+                self = .STX
+
+            case 3:
+                self = .ETX
+
+            case 4:
+                self = .EOT
+
+            case 5:
+                self = .ENQ
+
+            case 6:
+                self = .ACK
+
+            case 7:
+                self = .BEL
+
+            case 8:
+                self = .BS
+
+            case 9:
+                self = .TAB
+
+            case 10:
+                self = .LF
+
+            case 11:
+                self = .VT
+
+            case 12:
+                self = .FF
+
+            case 13:
+                self = .CR
+
+            case 14:
+                self = .SO
+
+            case 15:
+                self = .SI
+
+            case 16:
+                self = .DLE
+
+            case 17:
+                self = .DC1
+
+            case 18:
+                self = .DC2
+
+            case 19:
+                self = .DC3
+
+            case 20:
+                self = .DC4
+
+            case 21:
+                self = .NAK
+
+            case 22:
+                self = .SYN
+
+            case 23:
+                self = .ETB
+
+            case 24:
+                self = .CAN
+
+            case 25:
+                self = .EM
+
+            case 26:
+                self = .SUB
+
+            case 27:
+                self = .ESC
+
+            case 28:
+                self = .FS
+
+            case 29:
+                self = .GS
+
+            case 30:
+                self = .RS
+
+            case 31:
+                self = .US
+
+            case 32:
+                self = .Space
+
+            case 127:
+                self = .DEL
+
+            default:
+                return nil
+        }
+    }
 }
 
 extension SpecialCharacter: CustomStringConvertible
@@ -164,7 +385,7 @@ extension SpecialCharacter
 {
     public var string: String
     {
-        let data = Data(array: [self.rawValue])
+        let data = Data(array: [self.uint8])
         return data.string
     }
 
@@ -179,7 +400,7 @@ extension SpecialCharacter
 
         let char = data[0]
 
-        self.init(rawValue: char)
+        self.init(uint8: char)
     }
 }
 
@@ -187,7 +408,7 @@ extension SpecialCharacter
 {
     public var data: Data
     {
-        return Data(array: [self.rawValue])
+        return Data(array: [self.uint8])
     }
 
     public init?(data: Data)
@@ -199,7 +420,7 @@ extension SpecialCharacter
 
         let char = data[0]
 
-        self.init(rawValue: char)
+        self.init(uint8: char)
     }
 }
 
