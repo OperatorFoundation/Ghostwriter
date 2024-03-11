@@ -73,57 +73,109 @@ extension TypedText: CustomStringConvertible
     }
 }
 
-//extension TypedText
-//{
-//    public func match(string x: String) -> Bool
-//    {
-//        switch self
-//        {
-//            case .generator(let generator):
-//                let text = generator().text
-//                let prefix, rest = text
-//                return generator().string.text. == string
-//
-//            case .regexp(let expression):
-//                guard let regex = try? NSRegularExpression(pattern: expression, options: []) else
-//                {
-//                    return false
-//                }
-//
-//                let range = NSRange(x.startIndex..<x.endIndex, in: x)
-//
-//                let matches = regex.matches(in: x, options: [], range: range)
-//
-//                guard let match = matches.first else
-//                {
-//                    return false
-//                }
-//
-//                print("match.numberOfRanges - \(match.numberOfRanges)")
-//                guard match.numberOfRanges > 1 else
-//                {
-//                    return false
-//                }
-//
-//                let matchRange = match.range(at: 1)
-//
-//                // Extract the substring matching the capture group
-//                print("data count: \(x.data.count), string count: \(x.count)")
-//
-//                let result = x.data[matchRange.lowerBound..<matchRange.upperBound].string
-//
-//                print("result length: \(result.count)")
-//
-//                return true
-//
-//            case .special(let special):
-//                return special.string == string
-//
-//            case .string(let value):
-//                return value == string
-//
-//            case .text(let text):
-//                return text.string == string
-//        }
-//    }
-//}
+extension TypedText
+{
+    public func match(string x: String) -> MatchResult
+    {
+        switch self
+        {
+            case .generator(let generator):
+                let typedText = generator()
+                let string = typedText.string
+                guard string.count <= x.count else {
+                    return .SHORT
+                }
+            
+                return typedText.match(string: x)
+
+            case .regexp(let expression):
+                guard let regex = try? NSRegularExpression(pattern: expression, options: []) else
+                {
+                    return .FAILURE
+                }
+
+                let range = NSRange(x.startIndex..<x.endIndex, in: x)
+
+                let matches = regex.matches(in: x, options: [], range: range)
+
+                guard let match = matches.first else
+                {
+                    return .SHORT
+                }
+
+                print("match.numberOfRanges - \(match.numberOfRanges)")
+
+                let matchRange = match.range(at: 0)
+
+                // Extract the substring matching the capture group
+                print("data count: \(x.data.count), string count: \(x.count)")
+
+                let startIndex = x.index(x.startIndex, offsetBy: matchRange.upperBound)
+                let rest = String(x[startIndex..<x.endIndex])
+            
+                print("result length: \(rest.count)")
+
+                return .SUCCESS(rest)
+
+            case .special(let value):
+                guard x.count > 0 else {
+                    return .SHORT
+                }
+                
+                guard let (first, rest) = try? value.text.splitAt(0) else {
+                    return .SHORT
+                }
+                
+                guard first == x.text else {
+                    return .FAILURE
+                }
+            return .SUCCESS(rest.string)
+            
+            case .string(let value):
+                guard value.count <= x.count else {
+                    return .SHORT
+                }
+            
+                guard let (first, rest) = try? value.text.splitAt(x.count) else {
+                    return .SHORT
+                }
+            
+                if value.text == first {
+                    return .SUCCESS(rest.string)
+                } else {
+                    return .FAILURE
+                }
+
+            case .text(let value):
+                guard value.count() <= x.count else {
+                    return .SHORT
+                }
+            
+                guard let (first, rest) = try? value.splitAt(value.count()) else {
+                    return .SHORT
+                }
+            
+                if value == first {
+                    return .SUCCESS(rest.string)
+                } else {
+                    return .FAILURE
+                }
+            
+            case .newline(let newline):
+                let value = newline.string
+                guard value.count <= x.count else {
+                    return .SHORT
+                }
+            
+                guard let (first, rest) = try? value.text.splitAt(value.count) else {
+                    return .SHORT
+                }
+            
+                if value.text == first {
+                    return .SUCCESS(rest.string)
+                } else {
+                    return .FAILURE
+                }
+        }
+    }
+}

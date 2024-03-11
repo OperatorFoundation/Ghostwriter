@@ -42,9 +42,22 @@ extension StructuredText
 
 extension StructuredText
 {
-    public func match(string: String) throws -> Bool
+    public func match(string: String) throws -> MatchResult
     {
-        return false
+        var current = string
+        for text in self.texts {
+            let matchResult = text.match(string: current)
+            switch matchResult {
+            case .FAILURE:
+                return .FAILURE
+            case .SHORT:
+                return .SHORT
+            case .SUCCESS(let rest):
+                current = rest
+            }
+        }
+        
+        return .SUCCESS(current)
     }
 }
 
