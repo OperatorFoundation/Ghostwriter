@@ -75,19 +75,19 @@ extension TypedText: CustomStringConvertible
 
 extension TypedText
 {
-    public func match(string x: String) -> MatchResult
+    public func match(string input: String) -> MatchResult
     {
         switch self
         {
             case .generator(let generator):
                 let typedText = generator()
-                let string = typedText.string
-                guard string.count <= x.count else
+                let desired = typedText.string
+                guard input.count <= desired.count else
                 {
                     return .SHORT
                 }
             
-                return typedText.match(string: x)
+                return typedText.match(string: input)
 
             case .regexp(let expression):
                 guard let regex = try? NSRegularExpression(pattern: expression, options: []) else
@@ -95,9 +95,9 @@ extension TypedText
                     return .FAILURE
                 }
 
-                let range = NSRange(x.startIndex..<x.endIndex, in: x)
+                let range = NSRange(input.startIndex..<input.endIndex, in: input)
 
-                let matches = regex.matches(in: x, options: [], range: range)
+                let matches = regex.matches(in: input, options: [], range: range)
 
                 guard let match = matches.first else
                 {
@@ -109,22 +109,22 @@ extension TypedText
                 let matchRange = match.range(at: 0)
 
                 // Extract the substring matching the capture group
-                print("data count: \(x.data.count), string count: \(x.count)")
+                print("data count: \(input.data.count), string count: \(input.count)")
 
-                let startIndex = x.index(x.startIndex, offsetBy: matchRange.upperBound)
-                let rest = String(x[startIndex..<x.endIndex])
+                let startIndex = input.index(input.startIndex, offsetBy: matchRange.upperBound)
+                let rest = String(input[startIndex..<input.endIndex])
             
                 print("result length: \(rest.count)")
 
                 return .SUCCESS(rest)
 
             case .special(let value):
-                guard x.count > 0 else
+                guard input.count > 0 else
                 {
                     return .SHORT
                 }
                 
-                guard let (first, rest) = try? x.text.splitAt(0) else
+                guard let (first, rest) = try? input.text.splitAt(0) else
                 {
                     return .SHORT
                 }
@@ -136,18 +136,18 @@ extension TypedText
 
                 return .SUCCESS(rest.string)
             
-            case .string(let value):
-                guard value.count <= x.count else
+            case .string(let desired):
+                guard input.count <= desired.count else
                 {
                     return .SHORT
                 }
             
-                guard let (first, rest) = try? x.text.splitAt(x.count) else
+                guard let (first, rest) = try? input.text.splitAt(input.count) else
                 {
                     return .SHORT
                 }
             
-                if value.text == first
+                if first == desired.text
                 {
                     return .SUCCESS(rest.string)
                 }
@@ -156,18 +156,18 @@ extension TypedText
                     return .FAILURE
                 }
 
-            case .text(let value):
-                guard value.count() <= x.count else
+            case .text(let desired):
+                guard input.count <= desired.count() else
                 {
                     return .SHORT
                 }
             
-                guard let (first, rest) = try? x.text.splitAt(value.count()) else
+                guard let (first, rest) = try? input.text.splitAt(desired.count()) else
                 {
                     return .SHORT
                 }
             
-                if value == first
+                if first == desired
                 {
                     return .SUCCESS(rest.string)
                 }
@@ -177,18 +177,18 @@ extension TypedText
                 }
             
             case .newline(let newline):
-                let value = newline.string
-                guard value.count <= x.count else
+                let desired = newline.string
+                guard input.count <= desired.count else
                 {
                     return .SHORT
                 }
             
-                guard let (first, rest) = try? x.text.splitAt(value.count) else
+                guard let (first, rest) = try? input.text.splitAt(desired.count) else
                 {
                     return .SHORT
                 }
             
-                if value.text == first
+                if desired.text == first
                 {
                     return .SUCCESS(rest.string)
                 }
