@@ -82,7 +82,7 @@ extension TypedText
             case .generator(let generator):
                 let typedText = generator()
                 let desired = typedText.string
-                if input.count <= desired.count
+                if input.count < desired.count
                 {
                     return .SHORT
                 }
@@ -137,7 +137,7 @@ extension TypedText
                 return .SUCCESS(rest.string)
             
             case .string(let desired):
-                if input.count <= desired.count
+                if input.count < desired.count
                 {
                     return .SHORT
                 }
@@ -157,7 +157,7 @@ extension TypedText
                 }
 
             case .text(let desired):
-                if input.count <= desired.count()
+                if input.count < desired.count()
                 {
                     return .SHORT
                 }
@@ -178,7 +178,7 @@ extension TypedText
             
             case .newline(let newline):
                 let desired = newline.string
-                if input.count <= desired.count
+                if input.count < desired.count
                 {
                     return .SHORT
                 }
