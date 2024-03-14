@@ -70,3 +70,30 @@ extension Newline
         }
     }
 }
+
+extension Newline
+{
+    public var count: Int
+    {
+        switch self
+        {
+            case .crlf:
+                return 2
+
+            case .posix:
+                return 1
+
+            case .qnx:
+                return 1
+
+            case .risc:
+                return 2
+
+            case .windows:
+                return 2
+
+            case .zx:
+                return 1
+        }
+    }
+}
