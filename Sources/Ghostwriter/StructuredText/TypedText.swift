@@ -178,6 +178,14 @@ extension TypedText
             
             case .newline(let newline):
                 let desired = newline.string
+
+                print(input.count)
+                print(desired.count)
+                print(input.data.count)
+                print(desired.data.count)
+                print(input.text.count())
+                print(desired.text.count())
+
                 if input.count < desired.count
                 {
                     return .SHORT
