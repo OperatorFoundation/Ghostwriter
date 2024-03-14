@@ -7,6 +7,8 @@
 
 import Foundation
 
+import Text
+
 public enum Newline: String
 {
     case crlf
@@ -68,6 +70,14 @@ extension Newline
             case .zx:
                 return SpecialCharacter.LF.string
         }
+    }
+}
+
+extension Newline
+{
+    public var text: Text
+    {
+        return self.string.text
     }
 }
 

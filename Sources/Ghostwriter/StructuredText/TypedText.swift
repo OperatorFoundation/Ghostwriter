@@ -177,19 +177,17 @@ extension TypedText
                 }
             
             case .newline(let newline):
-                let desired = newline.string
+                let desired = newline.text
 
-                if input.count < newline.count
+                if input.data.count < newline.count
                 {
                     return .SHORT
                 }
-            
-                guard let (first, rest) = try? input.text.splitAt(desired.count) else
-                {
-                    return .SHORT
-                }
-            
-                if desired.text == first
+
+                let first = Data(input.data[0..<newline.count]).text
+                let rest = Data(input.data[newline.count...]).text
+
+                if first == desired
                 {
                     return .SUCCESS(rest.string)
                 }
