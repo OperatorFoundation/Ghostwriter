@@ -82,7 +82,8 @@ extension TypedText
             case .generator(let generator):
                 let typedText = generator()
                 let string = typedText.string
-                guard string.count <= x.count else {
+                guard string.count <= x.count else
+                {
                     return .SHORT
                 }
             
@@ -118,62 +119,81 @@ extension TypedText
                 return .SUCCESS(rest)
 
             case .special(let value):
-                guard x.count > 0 else {
+                guard x.count > 0 else
+                {
                     return .SHORT
                 }
                 
-                guard let (first, rest) = try? value.text.splitAt(0) else {
+                guard let (first, rest) = try? x.text.splitAt(0) else
+                {
                     return .SHORT
                 }
                 
-                guard first == x.text else {
+                guard first == value.text else
+                {
                     return .FAILURE
                 }
-            return .SUCCESS(rest.string)
+
+                return .SUCCESS(rest.string)
             
             case .string(let value):
-                guard value.count <= x.count else {
+                guard value.count <= x.count else
+                {
                     return .SHORT
                 }
             
-                guard let (first, rest) = try? value.text.splitAt(x.count) else {
+                guard let (first, rest) = try? x.text.splitAt(x.count) else
+                {
                     return .SHORT
                 }
             
-                if value.text == first {
+                if value.text == first
+                {
                     return .SUCCESS(rest.string)
-                } else {
+                }
+                else
+                {
                     return .FAILURE
                 }
 
             case .text(let value):
-                guard value.count() <= x.count else {
+                guard value.count() <= x.count else
+                {
                     return .SHORT
                 }
             
-                guard let (first, rest) = try? value.splitAt(value.count()) else {
+                guard let (first, rest) = try? x.text.splitAt(value.count()) else
+                {
                     return .SHORT
                 }
             
-                if value == first {
+                if value == first
+                {
                     return .SUCCESS(rest.string)
-                } else {
+                }
+                else
+                {
                     return .FAILURE
                 }
             
             case .newline(let newline):
                 let value = newline.string
-                guard value.count <= x.count else {
+                guard value.count <= x.count else
+                {
                     return .SHORT
                 }
             
-                guard let (first, rest) = try? value.text.splitAt(value.count) else {
+                guard let (first, rest) = try? x.text.splitAt(value.count) else
+                {
                     return .SHORT
                 }
             
-                if value.text == first {
+                if value.text == first
+                {
                     return .SUCCESS(rest.string)
-                } else {
+                }
+                else
+                {
                     return .FAILURE
                 }
         }
